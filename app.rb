@@ -1,11 +1,10 @@
-
 require 'sinatra/base'
 require_relative './lib/player.rb'
-
+require_relative './lib/game.rb'
 
 class Battle < Sinatra::Base
   enable :sessions
-  get "/" do
+  get '/' do
     'Testing infrastructure working!'
     erb(:index)
   end
@@ -15,20 +14,16 @@ class Battle < Sinatra::Base
     $player_2 = Player.new(params[:player_2])
     redirect '/play'
   end
+
   get '/play' do
-    
     erb(:play)
   end
+
   post '/player1attack' do
-    $player_1.attack($player_2)
-    erb(:player1attack)
-  end 
+    $new_game = Game.new
+    $new_game.attack($player_2)
+    redirect './play'
+  end
 
-  run! if app_file == $0
-
+  run! if app_file == $PROGRAM_NAME
 end
-
-
-
-
-
